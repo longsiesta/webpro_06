@@ -29,18 +29,24 @@ app.get("/luck", (req, res) => {
 
 app.get("/janken", (req, res) => {
   let hand = req.query.hand;
-  let win = Number( req.query.win );
-  let total = Number( req.query.total );
-  console.log( {hand, win, total});
-  const num = Math.floor( Math.random() * 3 + 1 );
+  let win = parseInt(req.query.win) || 0;
+  let total = parseInt(req.query.total) || 0;
+  const num = Math.floor(Math.random() * 3) + 1;
   let cpu = '';
-  if( num==1 ) cpu = 'グー';
-  else if( num==2 ) cpu = 'チョキ';
+  if (num === 1) cpu = 'グー';
+  else if (num === 2) cpu = 'チョキ';
   else cpu = 'パー';
-  // ここに勝敗の判定を入れる
-  // 今はダミーで人間の勝ちにしておく
-  let judgement = '勝ち';
-  win += 1;
+  let judgement = '';
+  if ((cpu === 'グー' && hand === 'パー') ||
+      (cpu === 'チョキ' && hand === 'グー') ||
+      (cpu === 'パー' && hand === 'チョキ')) {
+    judgement = '勝ち';
+    win += 1;
+  } else if (cpu === hand) {
+    judgement = 'あいこ';
+  } else {
+    judgement = '負け';
+  }
   total += 1;
   const display = {
     your: hand,
@@ -48,8 +54,10 @@ app.get("/janken", (req, res) => {
     judgement: judgement,
     win: win,
     total: total
-  }
-  res.render( 'janken', display );
+  };
+  console.log(display);
+  res.render('janken', display);
 });
+
 
 app.listen(8080, () => console.log("Example app listening on port 8080!"));
