@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>文字数カウント</title>
+</head>
+<body>
+  <h1>文字数・単語数カウント</h1>
+  <form action="/count" method="get">
+    <label for="text">文字列を入力してください(空白を挟むことで単語として認識するため適正言語は英語とする):</label>
+    <input type="text" id="text" name="text" required>
+    <button type="submit">カウント</button>
+  </form>
+  <% if (input) { %>
+    <p>入力: <%= input %></p>
+    <p>文字数: <%= charCount %></p>
+    <p>単語数: <%= wordCount %></p>
+  <% } %>
+</body>
+</html>

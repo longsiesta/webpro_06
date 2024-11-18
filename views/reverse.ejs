@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>文字列反転</title>
+</head>
+<body>
+  <h1>文字列を逆にする</h1>
+  <form action="/reverse" method="get">
+    <label for="text">文字列を入力してください:</label>
+    <input type="text" id="text" name="text" required>
+    <button type="submit">送信</button>
+  </form>
+  <% if (input) { %>
+    <p>入力: <%= input %></p>
+    <p>逆順: <%= reversed %></p>
+  <% } %>
+</body>
+</html>

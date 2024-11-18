@@ -19,13 +19,18 @@ app.get("/icon", (req, res) => {
 });
 
 app.get("/luck", (req, res) => {
-  const num = Math.floor( Math.random() * 6 + 1 );
+  const num = Math.floor(Math.random() * 6 + 1);
   let luck = '';
-  if( num==1 ) luck = '大吉';
-  else if( num==2 ) luck = '中吉';
-  console.log( 'あなたの運勢は' + luck + 'です' );
-  res.render( 'luck', {number:num, luck:luck} );
+  if (num == 1) luck = '大吉';
+  else if (num == 2) luck = '吉';
+  else if (num == 3) luck = '中吉';
+  else if (num == 4) luck = '小吉';
+  else if (num == 5) luck = '末吉';
+  else if (num == 6) luck = '凶';
+
+  res.render('luck', { number: num, luck: luck });
 });
+
 
 app.get("/janken", (req, res) => {
   let hand = req.query.hand;
@@ -58,6 +63,21 @@ app.get("/janken", (req, res) => {
   console.log(display);
   res.render('janken', display);
 });
+
+
+app.get("/reverse", (req, res) => {
+  const input = req.query.text || "";
+  const reversed = input.split("").reverse().join("");
+  res.render("reverse", { input, reversed });
+});
+
+app.get("/count", (req, res) => {
+  const input = req.query.text || '';
+  const charCount = input.length;
+  const wordCount = input.trim() ? input.trim().split(/\s+/).length : 0;
+  res.render('count', { input, charCount, wordCount });
+});
+
 
 
 app.listen(8080, () => console.log("Example app listening on port 8080!"));
