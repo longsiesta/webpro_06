@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>掲示板</title>
+    <style>
+        .cover { border-bottom: 1px solid #c0c0c0; margin: 3px; padding: 5px; }
+        .name { font-weight: bold; width: 8em; display: inline-block; }
+        .mes { margin-left: 10px; display: inline-block; }
+        .timestamp { margin-left: 10px; color: #808080; font-size: 0.9em; display: inline-block; }
+        .like { margin-left: 15px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>掲示板</h1>
+    <div id="bbs"></div>
+
+    <div>
+        <label for="name">名前：</label>
+        <input type="text" id="name">
+        <label for="message">メッセージ：</label>
+        <input type="text" id="message">
+        <button type="button" id="post">送信</button>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <label for="filter">ユーザー名で検索：</label>
+        <input type="text" id="filter">
+        <button id="filterButton">検索</button>
+    </div>
+
+    <script>
+        let bbs = [];
+        const bbsContainer = document.querySelector('#bbs');
+
+        // 掲示板をレンダリング
+        function renderBBS(posts = bbs) {
+            bbsContainer.innerHTML = ''; // 一旦クリア
+            posts.forEach((post, index) => {
+                const cover = document.createElement('div');
+                cover.className = 'cover';
+
+                const nameArea = document.createElement('span');
+                nameArea.className = 'name';
+                nameArea.innerText = post.name;
+
+                const messageArea = document.createElement('span');
+                messageArea.className = 'mes';
+                messageArea.innerText = post.message;
+
+                const timestampArea = document.createElement('span');
+                timestampArea.className = 'timestamp';
+                timestampArea.innerText = `投稿時間: ${post.timestamp}`;
+
+                const likeButton = document.createElement('button');
+                likeButton.className = 'like';
+                likeButton.innerText = `いいね (${post.likes})`;
+                likeButton.addEventListener('click', () => {
+                    post.likes++;
+                    renderBBS();
+                });
+
+                cover.appendChild(nameArea);
+                cover.appendChild(messageArea);
+                cover.appendChild(timestampArea);
+                cover.appendChild(likeButton);
+                bbsContainer.appendChild(cover);
+            });
+        }
+        
+
+        // 投稿ボタンのクリックイベント
+        document.querySelector('#post').addEventListener('click', () => {
+            const name = document.querySelector('#name').value;
+            const message = document.querySelector('#message').value;
+            const timestamp = new Date().toISOString();
+            
+            if (name && message) {
+                bbs.push({ name, message, timestamp, likes: 0 });
+                document.querySelector('#name').value = '';
+                document.querySelector('#message').value = '';
+                renderBBS();
+            } else {
+                alert('名前とメッセージを入力してください。');
+            }
+        });
+
+        // 検索ボタンのクリックイベント
+        document.querySelector('#filterButton').addEventListener('click', () => {
+            const filterName = document.querySelector('#filter').value.toLowerCase();
+            const filteredPosts = bbs.filter(post => post.name.toLowerCase().includes(filterName));
+            renderBBS(filteredPosts);
+        });
+        function renderBBS(posts = bbs) {
+    bbsContainer.innerHTML = ''; // 一旦クリア
+    posts.forEach((post, index) => {
+        const cover = document.createElement('div');
+        cover.className = 'cover';
+
+        const nameArea = document.createElement('span');
+        nameArea.className = 'name';
+        nameArea.innerText = post.name;
+
+        const messageArea = document.createElement('span');
+        messageArea.className = 'mes';
+        messageArea.innerText = post.message;
+
+        const timestampArea = document.createElement('span');
+        timestampArea.className = 'timestamp';
+        const date = new Date(post.timestamp);
+        timestampArea.innerText = `投稿時間: ${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 ${date.getHours()}時${date.getMinutes()}分${date.getSeconds()}秒`;
+
+        const likeButton = document.createElement('button');
+        likeButton.className = 'like';
+        likeButton.innerText = `いいね (${post.likes})`;
+        likeButton.addEventListener('click', () => {
+            post.likes++;
+            renderBBS();
+        });
+
+        cover.appendChild(nameArea);
+        cover.appendChild(messageArea);
+        cover.appendChild(timestampArea);
+        cover.appendChild(likeButton);
+        bbsContainer.appendChild(cover);
+    });
+}
+
+    </script>
+</body>
+</html>
